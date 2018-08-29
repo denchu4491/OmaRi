@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour {
 	private float jumpForceTime = 1.0f;
 	private bool breakEnabled = true;
     private float groundFriction = 0.0f;
-	Transform[] groundCheckTrfm;
+	[SerializeField] Transform[] groundCheckTrfm;
 	
 	void Awake(){
 		rigidbody2d = GetComponent<Rigidbody2D>();
@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour {
 
 	void FixedUpdate(){
 		// 接地チェック
-		//GroundCheck();
+		GroundCheck();
 
 		//移動停止処理
         if (breakEnabled) {
@@ -68,6 +68,7 @@ public class PlayerController : MonoBehaviour {
 	}
 
 	private void GroundCheck(){
+        if (groundCheckTrfm == null) return;
 		// 地面チェック
         groundedPrev = grounded;
         grounded = false;
@@ -113,9 +114,10 @@ public class PlayerController : MonoBehaviour {
     }
 
 	public void ActionJump() {
-        //if (!grounded) return;
+        if (jumped) return;
         jumped = true;
         jumpStartTime = Time.fixedTime;
-        rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, jumpPower);
+        //rigidbody2d.velocity = new Vector2(rigidbody2d.velocity.x, jumpPower);
+        rigidbody2d.AddForce(new Vector2(0f,jumpPower));
     }
 }
